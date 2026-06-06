@@ -12,7 +12,7 @@ export default function About() {
             Teknoloji ve Sosyal Ağların Gücüyle Pet Ekosistemini Yeniden Şekillendiriyoruz.
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Poody, evcil hayvan sahipleri ile ekosistemin profesyonel hizmet sağlayıcılarını
+            Petpoody, evcil hayvan sahipleri ile ekosistemin profesyonel hizmet sağlayıcılarını
             (veteriner hekimler, profesyonel gezdiriciler, pet otelleri ve bakım merkezleri)
             gelişmiş lokasyon teknolojileri çatısı altında birleştiren yeni nesil bir dijital platformdur.
             Amacımız, patili dostlarımızın yaşam kalitesini artırırken, sektöre yön veren işletmelere

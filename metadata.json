@@ -1,5 +1,5 @@
 {
-  "name": "Poody",
+  "name": "Petpoody",
   "description": "Poody, patili dostlarınızın sosyal dünyası, güvenli haritası ve veterinerden pet oteline tüm hizmetleri barındıran kapsamlı bir evcil hayvan ekosistemidir.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

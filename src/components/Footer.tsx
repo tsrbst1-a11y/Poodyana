@@ -7,11 +7,11 @@ export default function Footer({ config }: { config: SiteConfig | null }) {
       <div className="max-w-7xl mx-auto px-6 text-center">
         <img 
           src={config?.logoUrl || DefaultLogo} 
-          alt="Poody Logo" 
+          alt="Petpoody Logo" 
           className="h-10 w-auto object-contain mx-auto mb-4 invert brightness-0 grayscale"
           referrerPolicy="no-referrer"
         />
-        <p className="text-gray-400 text-sm">© 2026 Poody. Tüm hakları saklıdır.</p>
+        <p className="text-gray-400 text-sm">© 2026 Petpoody. Tüm hakları saklıdır.</p>
       </div>
     </footer>
   );

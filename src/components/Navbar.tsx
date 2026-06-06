@@ -19,7 +19,7 @@ export default function Navbar({ onNavigate, config }: { onNavigate: (page: 'hom
         <div className="flex items-center cursor-pointer" onClick={() => { onNavigate('home'); setIsOpen(false); }}>
           <img 
             src={config?.logoUrl || DefaultLogo} 
-            alt="Poody Logo" 
+            alt="Petpoody Logo" 
             className="h-10 sm:h-12 w-auto object-contain"
             referrerPolicy="no-referrer"
           />

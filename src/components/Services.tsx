@@ -62,9 +62,9 @@ export default function Services() {
             animate={{ opacity: 1, y: 0 }}
             className="font-display font-semibold text-5xl tracking-tight text-gray-900"
           >
-            Poody İş Ortağı Olun, Binlerce Pati Sahibine Anında Ulaşın.
+            Petpoody İş Ortağı Olun, Binlerce Pati Sahibine Anında Ulaşın.
           </motion.h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">Veteriner kliniklerinden pet otellerine kadar tüm hizmetlerinizi Poody haritasında listeleyin, randevularınızı ve kazancınızı yönetin.</p>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">Veteriner kliniklerinden pet otellerine kadar tüm hizmetlerinizi Petpoody haritasında listeleyin, randevularınızı ve kazancınızı yönetin.</p>
           <a href="#form" className="inline-block bg-[#A259FF] text-white px-8 py-4 rounded-full font-semibold hover:bg-purple-700 transition-all">Hemen Başvur</a>
         </div>
       </section>

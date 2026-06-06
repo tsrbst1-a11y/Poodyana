@@ -33,7 +33,7 @@ export default function Home({ config }: { config: SiteConfig | null }) {
             </h1>
             
             <p className="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-xl">
-              {config?.heroDescription || "Poody, patili dostlarınızın sosyal dünyası, güvenli haritası ve veterinerden pet oteline tüm hizmetleri barındıran kapsamlı bir evcil hayvan ekosistemidir."}
+              {config?.heroDescription || "Petpoody, patili dostlarınızın sosyal dünyası, güvenli haritası ve veterinerden pet oteline tüm hizmetleri barındıran kapsamlı bir evcil hayvan ekosistemidir."}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
@@ -84,7 +84,7 @@ export default function Home({ config }: { config: SiteConfig | null }) {
               <div className="absolute inset-0 bg-white overflow-hidden">
                 <img 
                   src={MockupImage} 
-                  alt="Poody App Mockup" 
+                  alt="Petpoody App Mockup" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                 />
