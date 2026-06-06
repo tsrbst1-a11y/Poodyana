@@ -28,11 +28,11 @@ export default function Home({ config }: { config: SiteConfig | null }) {
               Yepyeni Bir Dünya
             </div>
             
-            <h1 className="font-display font-bold text-5xl md:text-7xl text-gray-900 leading-[1.1] tracking-tight">
+            <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-7xl text-gray-900 leading-[1.1] tracking-tight">
               {config?.heroTitle || "Dostun İçin En İyisi Burada."}
             </h1>
             
-            <p className="text-xl text-gray-600 leading-relaxed max-w-xl">
+            <p className="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-xl">
               {config?.heroDescription || "Poody, patili dostlarınızın sosyal dünyası, güvenli haritası ve veterinerden pet oteline tüm hizmetleri barındıran kapsamlı bir evcil hayvan ekosistemidir."}
             </p>
 

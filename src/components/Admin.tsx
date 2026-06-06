@@ -4,7 +4,7 @@ import { db, auth } from '../lib/firebase';
 import { doc, getDoc, setDoc, collection, getDocs, updateDoc, query, orderBy, serverTimestamp, addDoc } from 'firebase/firestore';
 import { signInWithEmailAndPassword, onAuthStateChanged, User } from 'firebase/auth';
 import { SiteConfig, Application } from '../types';
-import { Save, Check, X, RefreshCw, LogIn, LayoutDashboard, FileText, Settings, Image as ImageIcon, Mail, Lock } from 'lucide-react';
+import { Save, Check, X, RefreshCw, LogIn, LayoutDashboard, FileText, Settings, Image as ImageIcon, Mail, Lock, Menu } from 'lucide-react';
 
 export default function Admin() {
   const [user, setUser] = useState<User | null>(null);
@@ -12,6 +12,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [authLoading, setAuthLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'config' | 'applications'>('config');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -239,10 +240,37 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col p-6 space-y-8">
+    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row relative">
+      {/* Mobile Header */}
+      <header className="lg:hidden bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <LayoutDashboard className="text-white w-5 h-5" />
+          </div>
+          <span className="font-bold text-xl text-gray-900">Poody Admin</span>
+        </div>
+        <button 
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="p-2 hover:bg-gray-100 rounded-lg transition-all"
+        >
+          {isSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </header>
+
+      {/* Sidebar Overlay (Mobile Only) */}
+      {isSidebarOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`
+        fixed lg:static inset-y-0 left-0 w-64 bg-white border-r border-gray-200 flex flex-col p-6 space-y-8 z-50 transition-transform duration-300 transform
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
+        <div className="hidden lg:flex items-center gap-3">
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
             <LayoutDashboard className="text-white w-5 h-5" />
           </div>
@@ -251,7 +279,7 @@ export default function Admin() {
 
         <nav className="flex-1 space-y-2">
           <button 
-            onClick={() => setActiveTab('config')}
+            onClick={() => { setActiveTab('config'); setIsSidebarOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
               activeTab === 'config' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-500 hover:bg-gray-50'
             }`}
@@ -260,7 +288,7 @@ export default function Admin() {
             Site Ayarları
           </button>
           <button 
-            onClick={() => setActiveTab('applications')}
+            onClick={() => { setActiveTab('applications'); setIsSidebarOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
               activeTab === 'applications' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-500 hover:bg-gray-50'
             }`}
@@ -280,7 +308,7 @@ export default function Admin() {
               </div>
             )}
             <div className="overflow-hidden">
-              <p className="text-xs font-bold text-gray-900 truncate">{user.displayName}</p>
+              <p className="text-xs font-bold text-gray-900 truncate">{user.displayName || 'Yönetici'}</p>
               <p className="text-[10px] text-gray-500 truncate">{user.email}</p>
             </div>
           </div>
@@ -294,26 +322,26 @@ export default function Admin() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-10 overflow-y-auto">
+      <main className="flex-1 p-4 sm:p-10 overflow-y-auto">
         {activeTab === 'config' ? (
           <div className="max-w-3xl space-y-8">
-            <header className="flex items-center justify-between">
+            <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900">Site Ayarları</h2>
-                <p className="text-gray-500">Görsel ve metin içeriklerini buradan yönetin.</p>
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Site Ayarları</h2>
+                <p className="text-sm text-gray-500">Görsel ve metin içeriklerini yönetin.</p>
               </div>
               <button 
                 onClick={handleSaveConfig}
                 disabled={loading}
-                className="flex items-center gap-2 bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-all disabled:opacity-50"
+                className="flex items-center justify-center gap-2 bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-all disabled:opacity-50"
               >
                 {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                Değişiklikleri Kaydet
+                Kaydet
               </button>
             </header>
 
             <div className="grid gap-6">
-              <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+              <div className="bg-white p-4 sm:p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
                 <div className="flex items-center gap-2 text-indigo-600 font-bold mb-2">
                   <ImageIcon className="w-5 h-5" />
                   Görsel Ayarları
@@ -326,7 +354,7 @@ export default function Admin() {
                     value={config.logoUrl}
                     onChange={(e) => setConfig({...config, logoUrl: e.target.value})}
                     placeholder="https://..."
-                    className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-indigo-100 outline-none"
+                    className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
                   />
                   {config.logoUrl && (
                     <div className="mt-2 p-4 bg-gray-50 rounded-xl border border-dashed border-gray-200 inline-block">
@@ -336,7 +364,7 @@ export default function Admin() {
                 </div>
               </div>
 
-              <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+              <div className="bg-white p-4 sm:p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
                 <div className="flex items-center gap-2 text-indigo-600 font-bold mb-2">
                   <FileText className="w-5 h-5" />
                   Hero Metinleri
@@ -349,7 +377,7 @@ export default function Admin() {
                       type="text" 
                       value={config.heroTitle}
                       onChange={(e) => setConfig({...config, heroTitle: e.target.value})}
-                      className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-indigo-100 outline-none"
+                      className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
                     />
                   </div>
                   <div className="space-y-2">
@@ -358,26 +386,26 @@ export default function Admin() {
                       rows={3}
                       value={config.heroDescription}
                       onChange={(e) => setConfig({...config, heroDescription: e.target.value})}
-                      className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-indigo-100 outline-none resize-none"
+                      className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-indigo-100 outline-none resize-none transition-all"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+              <div className="bg-white p-4 sm:p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
                 <div className="flex items-center gap-2 text-indigo-600 font-bold mb-2">
                   <LayoutDashboard className="w-5 h-5" />
                   Linkler
                 </div>
                 
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
                     <label className="text-sm font-bold text-gray-700">Google Play Linki</label>
                     <input 
                       type="text" 
                       value={config.googlePlayLink}
                       onChange={(e) => setConfig({...config, googlePlayLink: e.target.value})}
-                      className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-indigo-100 outline-none"
+                      className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
                     />
                   </div>
                   <div className="space-y-2">
@@ -386,7 +414,7 @@ export default function Admin() {
                       type="text" 
                       value={config.appStoreLink}
                       onChange={(e) => setConfig({...config, appStoreLink: e.target.value})}
-                      className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-indigo-100 outline-none"
+                      className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -396,85 +424,87 @@ export default function Admin() {
         ) : (
           <div className="space-y-8">
             <header>
-              <h2 className="text-3xl font-bold text-gray-900">Başvurular</h2>
-              <p className="text-gray-500">İşletmelerden gelen başvuru taleplerini yönetin.</p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Başvurular</h2>
+              <p className="text-sm text-gray-500">İşletmelerden gelen başvuru taleplerini yönetin.</p>
             </header>
 
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-gray-50/50 border-b border-gray-100">
-                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase">İşletme Adı</th>
-                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Yetkili</th>
-                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase">İletişim</th>
-                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Durum</th>
-                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase text-right">İşlem</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {applications.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="px-6 py-12 text-center">
-                        <p className="text-gray-500 mb-4">Henüz başvuru bulunmuyor.</p>
-                        <button 
-                          onClick={seedSampleApplication}
-                          className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-sm font-bold hover:bg-indigo-100 transition-all border border-indigo-100"
-                        >
-                          Örnek Başvuru Oluştur (Test İçin)
-                        </button>
-                      </td>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="bg-gray-50/50 border-b border-gray-100">
+                      <th className="px-4 sm:px-6 py-4 text-xs font-bold text-gray-400 uppercase whitespace-nowrap">İşletme Adı</th>
+                      <th className="px-4 sm:px-6 py-4 text-xs font-bold text-gray-400 uppercase whitespace-nowrap">Yetkili</th>
+                      <th className="px-4 sm:px-6 py-4 text-xs font-bold text-gray-400 uppercase whitespace-nowrap">İletişim</th>
+                      <th className="px-4 sm:px-6 py-4 text-xs font-bold text-gray-400 uppercase whitespace-nowrap">Durum</th>
+                      <th className="px-4 sm:px-6 py-4 text-xs font-bold text-gray-400 uppercase whitespace-nowrap text-right">İşlem</th>
                     </tr>
-                  ) : (
-                    applications.map((app) => (
-                      <tr key={app.id} className="hover:bg-gray-50/50 transition-colors text-sm">
-                        <td className="px-6 py-4">
-                          <p className="font-bold text-gray-900">{app.businessName}</p>
-                          <p className="text-[10px] text-indigo-500 font-bold uppercase">{app.category}</p>
-                        </td>
-                        <td className="px-6 py-4">
-                          <p className="font-medium text-gray-900">{app.contactName}</p>
-                          <p className="text-xs text-gray-500">{app.region}</p>
-                        </td>
-                        <td className="px-6 py-4">
-                          <p className="text-gray-900">{app.email}</p>
-                          <p className="text-gray-500">{app.phone}</p>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                            app.status === 'approved' ? 'bg-green-100 text-green-600' :
-                            app.status === 'rejected' ? 'bg-rose-100 text-rose-600' :
-                            'bg-amber-100 text-amber-600'
-                          }`}>
-                            {app.status === 'approved' ? 'Onaylandı' : app.status === 'rejected' ? 'Reddedildi' : 'Bekliyor'}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            {app.status === 'pending' && (
-                              <>
-                                <button 
-                                  onClick={() => handleUpdateAppStatus(app.id, 'approved')}
-                                  className="p-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-all"
-                                  title="Onayla"
-                                >
-                                  <Check className="w-4 h-4" />
-                                </button>
-                                <button 
-                                  onClick={() => handleUpdateAppStatus(app.id, 'rejected')}
-                                  className="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition-all"
-                                  title="Reddet"
-                                >
-                                  <X className="w-4 h-4" />
-                                </button>
-                              </>
-                            )}
-                          </div>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {applications.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="px-6 py-12 text-center">
+                          <p className="text-gray-500 mb-4">Henüz başvuru bulunmuyor.</p>
+                          <button 
+                            onClick={seedSampleApplication}
+                            className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-sm font-bold hover:bg-indigo-100 transition-all border border-indigo-100"
+                          >
+                            Örnek Başvuru Oluştur
+                          </button>
                         </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ) : (
+                      applications.map((app) => (
+                        <tr key={app.id} className="hover:bg-gray-50/50 transition-colors text-sm">
+                          <td className="px-4 sm:px-6 py-4">
+                            <p className="font-bold text-gray-900 whitespace-nowrap">{app.businessName}</p>
+                            <p className="text-[10px] text-indigo-500 font-bold uppercase">{app.category}</p>
+                          </td>
+                          <td className="px-4 sm:px-6 py-4">
+                            <p className="font-medium text-gray-900 whitespace-nowrap">{app.contactName}</p>
+                            <p className="text-xs text-gray-500 whitespace-nowrap">{app.region}</p>
+                          </td>
+                          <td className="px-4 sm:px-6 py-4">
+                            <p className="text-gray-900 whitespace-nowrap">{app.email}</p>
+                            <p className="text-gray-500 whitespace-nowrap">{app.phone}</p>
+                          </td>
+                          <td className="px-4 sm:px-6 py-4">
+                            <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap ${
+                              app.status === 'approved' ? 'bg-green-100 text-green-600' :
+                              app.status === 'rejected' ? 'bg-rose-100 text-rose-600' :
+                              'bg-amber-100 text-amber-600'
+                            }`}>
+                              {app.status === 'approved' ? 'Onaylandı' : app.status === 'rejected' ? 'Reddedildi' : 'Bekliyor'}
+                            </span>
+                          </td>
+                          <td className="px-4 sm:px-6 py-4 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              {app.status === 'pending' && (
+                                <>
+                                  <button 
+                                    onClick={() => handleUpdateAppStatus(app.id, 'approved')}
+                                    className="p-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-all"
+                                    title="Onayla"
+                                  >
+                                    <Check className="w-4 h-4" />
+                                  </button>
+                                  <button 
+                                    onClick={() => handleUpdateAppStatus(app.id, 'rejected')}
+                                    className="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition-all"
+                                    title="Reddet"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}
