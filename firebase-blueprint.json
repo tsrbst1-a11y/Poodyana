@@ -1,0 +1,57 @@
+{
+  "entities": {
+    "SiteConfig": {
+      "title": "Site Configuration",
+      "description": "Global site settings including logo, hero text, and other variables.",
+      "type": "object",
+      "properties": {
+        "logoUrl": { "type": "string", "description": "URL of the site logo" },
+        "heroTitle": { "type": "string", "description": "The main headline on the home page" },
+        "heroDescription": { "type": "string", "description": "The description text on the home page" },
+        "googlePlayLink": { "type": "string", "description": "Link to the Google Play Store" },
+        "appStoreLink": { "type": "string", "description": "Link to the App Store" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["logoUrl", "heroTitle", "heroDescription"]
+    },
+    "Application": {
+      "title": "Partner Application",
+      "description": "Submissions from the 'Apply Now' form for businesses.",
+      "type": "object",
+      "properties": {
+        "businessName": { "type": "string" },
+        "contactName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "message": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["businessName", "contactName", "email", "status"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Internal admin users.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "email": { "type": "string" }
+      },
+      "required": ["userId", "email"]
+    }
+  },
+  "firestore": {
+    "configs/main": {
+      "schema": "SiteConfig",
+      "description": "Singleton configuration for the site."
+    },
+    "applications/{applicationId}": {
+      "schema": "Application",
+      "description": "Collection of business partnership applications."
+    },
+    "admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Whitelist of administrator users."
+    }
+  }
+}

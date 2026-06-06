@@ -15,3 +15,25 @@ export interface UserProfile {
   avatar: string;
   pets: Pet[];
 }
+
+export interface SiteConfig {
+  logoUrl: string;
+  heroTitle: string;
+  heroDescription: string;
+  googlePlayLink: string;
+  appStoreLink: string;
+  updatedAt?: any;
+}
+
+export interface Application {
+  id: string;
+  businessName: string;
+  contactName: string;
+  email: string;
+  phone?: string;
+  message?: string;
+  category?: string;
+  region?: string;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: any;
+}
